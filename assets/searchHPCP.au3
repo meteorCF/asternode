@@ -1,9 +1,9 @@
-Func searchHPCP($windowHor, $windowVer, $vDC, $hDll)
-	Local $hpPosHor = $windowHor + 160
-	Local $hpPosVer = $windowVer + 50
+Func searchHPCP($windowX, $windowY, $vDC, $hDll)
+	Local $hpPosX = $windowX + 160
+	Local $hpPosY = $windowY + 50
 
     While 1
-        Local $rgb = _ColorGetRGB('0x' & _PixelGetColor_GetPixel($vDC, $hpPosHor, $hpPosVer, $hDll))
+        Local $rgb = _ColorGetRGB('0x' & _PixelGetColor_GetPixel($vDC, $hpPosX, $hpPosY, $hDll))
         Local $red = $rgb[0]
         Local $green = $rgb[1]
         Local $blue = $rgb[2]
@@ -11,23 +11,24 @@ Func searchHPCP($windowHor, $windowVer, $vDC, $hDll)
         If $red > 125 And $green < 60 And $blue < 50 Then
             ExitLoop
         Else
-            $hpPosVer += 1
+            $hpPosY += 1
         EndIf
     WEnd
 
-    While _PixelGetColor_GetPixel($vDC, $hpPosHor, $hpPosVer, $hDll) <> 817964
-        $hpPosHor += 1
+    While _PixelGetColor_GetPixel($vDC, $hpPosX, $hpPosY, $hDll) <> 817964
+        $hpPosX += 1
     WEnd
 
-    While _RGB2HSB(_ColorGetRGB('0x' & _PixelGetColor_GetPixel($vDC, $hpPosHor, $hpPosVer, $hDll)))[2] > 50
-        $hpPosVer -= 1   
+    While _RGB2HSB(_ColorGetRGB('0x' & _PixelGetColor_GetPixel($vDC, $hpPosX, $hpPosY, $hDll)))[2] > 50
+        $hpPosY -= 1   
     WEnd
 
-    $hpPosVer = $hpPosVer + 28
-    $cpPosVer = $hpPosVer - 13
+    $hpPosY = $hpPosY + 28
+    $cpPosY = $hpPosY - 13
 
-    $hpPosHor = $hpPosHor - 6
-    $cpPosHor = $hpPosHor
+    $hpPosX = $hpPosX - 6
+    $cpPosX = $hpPosX
 
-    return [ $hpPosHor, $hpPosVer, $cpPosHor, $cpPosVer ]
+    Local $return = [$hpPosX, $hpPosY, $cpPosX, $cpPosY]
+    return $return
 EndFunc
